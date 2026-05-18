@@ -1,0 +1,5 @@
+- name: Deploy BookMyShow Application
+  hosts: kubeserver
+  tasks:
+    - name: Deploy BMS image on Kubernetes cluster
+      command: kubectl create -f https://raw.githubusercontent.com/15Vaibhavparte/BookMyShow/refs/heads/main/deployment.yml
