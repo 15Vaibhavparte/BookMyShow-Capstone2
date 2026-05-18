@@ -1,14 +1,17 @@
+---
 - name: Deploy BookMyShow Application
-  hosts: kubeserver
+  hosts: kubernetes_master
   become: true
   tasks:
-    - name: Deploy BMS image on Kubernetes cluster
-      command: kubectl create -f https://raw.githubusercontent.com/15Vaibhavparte/BookMyShow/refs/heads/main/deployment.yml
-    
-    - name: Expose BMS application using NodePort
-      command: kubectl create -f https://raw.githubusercontent.com/15Vaibhavparte/BookMyShow/refs/heads/main/node-port.yml
-    
-    - name: Set up Horizontal Pod Autoscaler for BMS application
-      command: kubectl create -f https://raw.githubusercontent.com/15Vaibhavparte/BookMyShow/refs/heads/main/hpa.yml
-    
-    
+    - name: Clone the latest repository to the Master Node
+      git:
+        repo: 'https://github.com/15Vaibhavparte/BookMyShow.git'
+        dest: /tmp/BookMyShow
+        version: main
+        force: yes
+
+    - name: Apply all Kubernetes manifests in the kubernetes folder
+      command: kubectl apply -f /tmp/BookMyShow/kubernetes/
+
+    - name: Force Kubernetes to pull the new Docker image
+      command: kubectl rollout restart deployment bookmyshow-app
