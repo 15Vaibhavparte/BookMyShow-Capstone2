@@ -4,3 +4,11 @@
   tasks:
     - name: Deploy BMS image on Kubernetes cluster
       command: kubectl create -f https://raw.githubusercontent.com/15Vaibhavparte/BookMyShow/refs/heads/main/deployment.yml
+    
+    - name: Expose BMS application using NodePort
+      command: kubectl create -f https://raw.githubusercontent.com/15Vaibhavparte/BookMyShow/refs/heads/main/node-port.yml
+    
+    - name: Set up Horizontal Pod Autoscaler for BMS application
+      command: kubectl create -f https://raw.githubusercontent.com/15Vaibhavparte/BookMyShow/refs/heads/main/hpa.yml
+    
+    
