@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: bookmyshow-app-container
-        image: 15parte/bookmyshow-app:latest
+        image: parte15/bookmyshow-app:latest
         ports:
         - containerPort: 3000 
