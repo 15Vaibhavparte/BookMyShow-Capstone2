@@ -62,7 +62,7 @@ pipeline {
         
         stage ("Run playbook to deploy on Kubernetes") {
             steps {
-                sh 'ansible-playbook -i /etc/ansible/hosts /etc/ansible/playbook.yml'
+                sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.3.3 "ansible-playbook -i /etc/ansible/hosts /etc/ansible/playbook.yml"'
             }
         }
     }
