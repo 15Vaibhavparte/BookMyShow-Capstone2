@@ -5,9 +5,9 @@ pipeline {
         nodejs 'node18' // Using node18 to match your Docker container environment
     }
     environment {  
-        // Define Docker and Image details here
         DOCKER_CREDS = 'docker'
-        IMAGE_REPO = 'parte15/bookmyshow-app:latest'
+        // FIX: Removed ':latest' so the tags append correctly (e.g., parte15/bookmyshow-app:12)
+        IMAGE_REPO = 'parte15/bookmyshow-app'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
     }
     stages {
@@ -24,13 +24,19 @@ pipeline {
         
         stage("Install NPM Dependencies") {
             steps {
-                sh "npm install"
+                // Navigate to the React app folder before installing dependencies
+                dir('bookmyshow-app') {
+                    sh "npm install"
+                }
             }
         }
         
         stage ("Build Docker Image") {
             steps {
-                sh "docker build -t bookmyshow-app ."
+                // Navigate to the React app folder so it uses bookmyshow-app/Dockerfile
+                dir('bookmyshow-app') {
+                    sh "docker build -t bookmyshow-app ."
+                }
             }
         }
         
@@ -54,10 +60,9 @@ pipeline {
             }
         }
         
-        
         stage ("Run playbook to deploy on Kubernetes") {
             steps {
-            sh'ansible-playbook -i /etc/ansible/hosts /etc/ansible/playbook.yml'
+                sh 'ansible-playbook -i /etc/ansible/hosts /etc/ansible/playbook.yml'
             }
         }
     }
