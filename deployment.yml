@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookmyshow-app
+  labels:
+    app: bms
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: bms
+  template:
+    metadata:
+      labels:
+        app: bms
+    spec:
+      containers:
+      - name: bookmyshow-app-container
+        image: 15parte/bookmyshow-app:latest
+        ports:
+        - containerPort: 3000 
