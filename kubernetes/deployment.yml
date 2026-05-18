@@ -17,5 +17,6 @@ spec:
       containers:
       - name: bookmyshow-app-container
         image: parte15/bookmyshow-app:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 3000 
