@@ -2,11 +2,11 @@ pipeline {
     agent any
     tools {
         jdk 'jdk17'
-        nodejs 'node18' // Using node18 to match your Docker container environment
+        nodejs 'node18' // Using node18 to match our Docker container environment
     }
     environment {  
         DOCKER_CREDS = 'docker'
-        // FIX: Removed ':latest' so the tags append correctly (e.g., parte15/bookmyshow-app:12)
+        // Removed ':latest' so the tags append correctly (e.g., parte15/bookmyshow-app:12)
         IMAGE_REPO = 'parte15/bookmyshow-app'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
     }
