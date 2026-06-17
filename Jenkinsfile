@@ -6,7 +6,6 @@ pipeline {
     }
     environment {  
         DOCKER_CREDS = 'docker'
-        // Removed ':latest' so the tags append correctly (e.g., parte15/bookmyshow-app:12)
         IMAGE_REPO = 'parte15/bookmyshow-app'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
     }
