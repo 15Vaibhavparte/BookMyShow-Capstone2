@@ -8,6 +8,9 @@ pipeline {
         DOCKER_CREDS = 'docker'
         IMAGE_REPO = 'parte15/bookmyshow-app'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
+
+        SONAR_PROJECT_KEY = "bookmyshow-app"
+        SCANNER_HOME = tool 'sonar-scanner'
     }
     stages {
         stage ("clean workspace") {
@@ -20,12 +23,39 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/15Vaibhavparte/BookMyShow.git'
             }
         }
-        
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonar-server') {
+                    sh ''' 
+                    $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=BMS \
+                    -Dsonar.projectKey="${SONAR_PROJECT_KEY}" 
+                    '''
+                }
+            }
+        }
+        stage('Quality Gate') {
+            steps {
+                script {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-token'
+                }
+            }
+        }
+
         stage("Install NPM Dependencies") {
             steps {
                 // Navigate to the React app folder before installing dependencies
                 dir('bookmyshow-app') {
-                    sh "npm install"
+                    sh '''
+                ls -la  # Verify package.json exists
+                if [ -f package.json ]; then
+                    rm -rf node_modules package-lock.json  # Remove old dependencies
+                    npm install  # Install fresh dependencies
+                else
+                    echo "Error: package.json not found in bookmyshow-app!"
+                    exit 1
+                fi
+                '''
                 }
             }
         }
@@ -38,6 +68,18 @@ pipeline {
                 }
             }
         }
+        stage('OWASP FS Scan') {
+            steps {
+                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
+        stage('Trivy FS Scan') {
+            steps {
+                sh 'trivy fs . > trivyfs.txt'
+            }
+        }
+
         
         stage ("Tag & Push to DockerHub") {
             steps {
@@ -58,11 +100,38 @@ pipeline {
                 }
             }
         }
-        
-        stage ("Run playbook to deploy on Kubernetes") {
+        stage('Deploy to Container') {
             steps {
-                sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.3.3 "ansible-playbook -i /etc/ansible/hosts /etc/ansible/playbook.yml"'
+                sh ''' 
+                echo "Stopping and removing old container..."
+                docker stop bookmyshow-app || true
+                docker rm bookmyshow-app || true
+
+                echo "Running new container on port 3000..."
+                docker run -d --restart=always --name bookmyshow-app -p 3000:3000 ${IMAGE_REPO}:latest
+
+                echo "Checking running containers..."
+                docker ps -a
+
+                echo "Fetching logs..."
+                sleep 5  # Give time for the app to start
+                docker logs bookmyshow-app
+                '''
+          
             }
+        }
+    }
+    post {
+        always {
+            emailext attachLog: true,
+                subject: "'${currentBuild.result}'",
+                body: "Project: ${env.JOB_NAME}<br/>" +
+                      "Build Number: ${env.BUILD_NUMBER}<br/>" +
+                      "URL: ${env.BUILD_URL}<br/>",
+                to: 'vaibhavparte2@gmail.com',
+                attachmentsPattern: 'trivyfs.txt,trivyimage.txt'
+           
+            sh '''docker image prune -f || true'''
         }
     }
 }
