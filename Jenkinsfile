@@ -2,7 +2,7 @@ pipeline {
     agent any
     tools {
         jdk 'jdk17'
-        nodejs 'node18' // Using node18 to match our Docker container environment
+        nodejs 'node23' // Using node18 to match our Docker container environment
     }
     environment {  
         DOCKER_CREDS = 'docker'
