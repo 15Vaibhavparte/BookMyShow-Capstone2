@@ -5,7 +5,7 @@ metadata:
   labels:
     app: bms
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: bms
@@ -15,7 +15,7 @@ spec:
         app: bms
     spec:
       containers:
-      - name: bookmyshow-app-container
+      - name: bookmyshow-container
         image: parte15/bookmyshow-app:latest
         imagePullPolicy: Always
         ports:

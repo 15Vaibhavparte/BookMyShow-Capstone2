@@ -11,6 +11,10 @@ pipeline {
 
         SONAR_PROJECT_KEY = "bookmyshow-app"
         SCANNER_HOME = tool 'sonar-scanner'
+
+        EKS_CLUSTER_NAME = 'bookmyshow-eks'
+        AWS_REGION = 'ap-south-1'
+    
     }
     stages {
         stage ("clean workspace") {
@@ -120,6 +124,33 @@ pipeline {
           
             }
         }
+
+        stage('Deploy to EKS Cluster') {
+            steps {
+                script {
+                    sh '''
+                    echo "Verifying AWS credentials..."
+                    aws sts get-caller-identity
+
+                    echo "Configuring kubectl for EKS cluster..."
+                    aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
+
+                    echo "Verifying kubeconfig..."
+                    kubectl config view
+
+                    echo "Deploying application to EKS..."
+                    kubectl apply -f /bookmyshow/kubernetes/deployment.yml
+                    kubectl apply -f /bookmyshow/kubernetes/service.yml
+
+                    echo "Verifying deployment..."
+                    kubectl get pods
+                    kubectl get svc
+                    '''
+                }
+            }
+        }
+    }
+
     }
     post {
         always {
