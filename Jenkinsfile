@@ -55,6 +55,8 @@ pipeline {
                 if [ -f package.json ]; then
                     rm -rf node_modules package-lock.json  # Remove old dependencies
                     npm install  # Install fresh dependencies
+                    npm install react-is styled-components
+
                 else
                     echo "Error: package.json not found in bookmyshow-app!"
                     exit 1
@@ -139,8 +141,8 @@ pipeline {
                     kubectl config view
 
                     echo "Deploying application to EKS..."
-                    kubectl apply -f /bookmyshow/kubernetes/deployment.yml
-                    kubectl apply -f /bookmyshow/kubernetes/service.yml
+                    kubectl apply -f kubernetes/deployment.yml
+                    kubectl apply -f kubernetes/service.yml
 
                     echo "Verifying deployment..."
                     kubectl get pods

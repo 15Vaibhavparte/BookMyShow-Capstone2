@@ -1,0 +1,27 @@
+# NodePort Service for BookMyShow App
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookmyshow-service
+  labels:
+    app: bms
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 3000 
+  selector:
+    app: bms
+
+
+
+#FOR NODE-PORT.yml 
+# spec:
+#   type: NodePort
+#   selector:
+#     app: bms
+#   ports:
+#     - protocol: TCP 
+#       port: 3000
+#       targetPort: 3000
+#       nodePort: 30001
