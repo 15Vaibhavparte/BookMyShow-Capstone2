@@ -36,7 +36,7 @@ export const Entertainment = () => {
             breakpoint: { max: 464, min: 0 },
             items: 1
         }
-    };clear
+    };
     return (
         <div className={styles.parent} style={{ margin: 10 }}>
             <div className={styles.parent__text}>
