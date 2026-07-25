@@ -155,15 +155,23 @@ pipeline {
 
     post {
         always {
-            emailext attachLog: true,
-                subject: "'${currentBuild.result}'",
-                body: "Project: ${env.JOB_NAME}<br/>" +
-                      "Build Number: ${env.BUILD_NUMBER}<br/>" +
-                      "URL: ${env.BUILD_URL}<br/>",
-                to: 'vaibhavparte2@gmail.com',
-                attachmentsPattern: 'trivyfs.txt,trivyimage.txt'
-           
-            sh '''docker image prune -f || true'''
+            script {
+                emailext (
+                    attachLog: true,
+                    subject: "Build Status: ${currentBuild.currentResult} - Job: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    body: """
+                        <h3>Jenkins Build Notification</h3>
+                        <p><b>Project:</b> ${env.JOB_NAME}</p>
+                        <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
+                        <p><b>Status:</b> ${currentBuild.currentResult}</p>
+                        <p><b>URL:</b> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                        <hr/>
+                        <p><i>The Trivy File System Scan report is attached to this email.</i></p>
+                    """,
+                    mimeType: 'text/html',
+                    to: 'vaibhavparte2@gmail.com',
+                    attachmentsPattern: 'trivyfs.txt'
+                )
+            }
         }
-    }
 }
