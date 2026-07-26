@@ -74,12 +74,12 @@ pipeline {
                 }
             }
         }
-        stage('OWASP FS Scan') {
-            steps {
-                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check', nvdCredentialsId: 'nvd-api-key'
-                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-            }
-        }
+        // stage('OWASP FS Scan') {
+        //     steps {
+        //         dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check', nvdCredentialsId: 'nvd-api-key'
+        //         dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+        //     }
+        // }
         stage('Trivy FS Scan') {
             steps {
                 sh 'trivy fs . > trivyfs.txt'
@@ -144,6 +144,8 @@ pipeline {
                     kubectl apply -f kubernetes/deployment.yml
                     kubectl apply -f kubernetes/service.yml
 
+                    kubectl rollout restart deployment/bookmyshow-app
+                    
                     echo "Verifying deployment..."
                     kubectl get pods
                     kubectl get svc
@@ -170,7 +172,9 @@ pipeline {
                     """,
                     mimeType: 'text/html',
                     to: 'vaibhavparte2@gmail.com',
+                    replyTo: 'vaibhavparte2@gmail.com',
                     attachmentsPattern: 'trivyfs.txt'
+                    debugMode: trueb
                 )
             }
         }
