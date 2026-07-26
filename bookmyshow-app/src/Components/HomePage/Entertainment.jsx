@@ -40,7 +40,7 @@ export const Entertainment = () => {
     return (
         <div className={styles.parent} style={{ margin: 10 }}>
             <div className={styles.parent__text}>
-                <h1>The Best of Entertainment</h1>
+                <h1>The Best of Oscars</h1>
             </div>
             <div className={styles.entertainment_container}>
                 <Carousel responsive={responsive} removeArrowOnDeviceType={["tablet", "mobile"]} >
