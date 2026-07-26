@@ -174,7 +174,6 @@ pipeline {
                     to: 'vaibhavparte2@gmail.com',
                     replyTo: 'vaibhavparte2@gmail.com',
                     attachmentsPattern: 'trivyfs.txt'
-                    debugMode: true
                 )
             }
         }
