@@ -1,10 +1,10 @@
 pipeline {
-    agent any
-    tools {
+    agent any            // Executes the pipeline on any available Jenkins worker node/agent.
+    tools {              // Injects required build tools (Java and Node.js) into the pipeline environment.
         jdk 'jdk17'
         nodejs 'node18' // Using node18 to match our Docker container environment
     }
-    environment {  
+    environment {          // Defines global environment variables used across multiple stages, such as registry credentials, cluster names, and AWS regions.
         DOCKER_CREDS = 'docker'
         IMAGE_REPO = 'parte15/bookmyshow-app'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
@@ -16,8 +16,8 @@ pipeline {
         AWS_REGION = 'ap-south-1'
     
     }
-    stages {
-        stage ("clean workspace") {
+    stages {                    
+        stage ("clean workspace") {         // Clears the Jenkins workspace to prevent artifact conflicts and ensure a pristine build environment.
             steps {
                 cleanWs()
             }
@@ -28,7 +28,7 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
+        stage('SonarQube Analysis') {       // Executes static code analysis using the SonarQube scanner to identify bugs, code smells, and vulnerabilities.
             steps {
                 withSonarQubeEnv('sonar-server') {
                     sh ''' 
@@ -38,7 +38,7 @@ pipeline {
                 }
             }
         }
-        stage('Quality Gate') {
+        stage('Quality Gate') {             // Halts the pipeline to wait for SonarQube's response, proceeding only if the code meets predefined quality thresholds.
             steps {
                 script {
                     waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-token'
@@ -46,7 +46,7 @@ pipeline {
             }
         }
 
-        stage("Install NPM Dependencies") {
+        stage("Install NPM Dependencies") {         // Navigates into the React app directory, removes stale packages, and cleanly installs required Node.js dependencies.
             steps {
                 // Navigate to the React app folder before installing dependencies
                 dir('bookmyshow-app') {
@@ -66,7 +66,7 @@ pipeline {
             }
         }
         
-        stage ("Build Docker Image") {
+        stage ("Build Docker Image") {      // Compiles the React application into a standalone Docker container image using the local Dockerfile.
             steps {
                 // Navigate to the React app folder so it uses bookmyshow-app/Dockerfile
                 dir('bookmyshow-app') {
@@ -74,20 +74,20 @@ pipeline {
                 }
             }
         }
-        stage('OWASP FS Scan') {
+        stage('OWASP FS Scan') {            // Scans the project's dependencies for known public vulnerabilities (CVEs) and generates an XML report.
             steps {
                 dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check', nvdCredentialsId: 'nvd-api-key'
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
-        stage('Trivy FS Scan') {
+        stage('Trivy FS Scan') {            // Audits the local file system for security flaws and exposed secrets, saving the output to a text file.
             steps {
                 sh 'trivy fs . > trivyfs.txt'
             }
         }
 
         
-        stage ("Tag & Push to DockerHub") {
+        stage ("Tag & Push to DockerHub") {         // Authenticates with Docker Hub, tags the new image with the build number and 'latest', and pushes them to the remote registry.
             steps {
                 script {
                     // Securely inject Docker credentials using native Jenkins commands
@@ -106,7 +106,7 @@ pipeline {
                 }
             }
         }
-        stage('Deploy to Container') {
+        stage('Deploy to Container') {                  // Stops any existing local containers and spins up the newly built image on port 3000 to verify basic runtime stability.
             steps {
                 sh ''' 
                 echo "Stopping and removing old container..."
@@ -127,7 +127,7 @@ pipeline {
             }
         }
 
-        stage('Deploy to EKS Cluster') {
+        stage('Deploy to EKS Cluster') {                    // Executes after the pipeline completes, automatically sending an HTML email alert with the build status, logs, and security report.
             steps {
                 script {
                     sh '''

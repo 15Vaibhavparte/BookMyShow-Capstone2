@@ -88,7 +88,6 @@ bookmyshow-clone/
 │   ├── provider.tf
 │   └── resource.sh
 │
-├── playbook.yml
 ├── Dockerfile
 └── Jenkinsfile
 ```
@@ -422,7 +421,7 @@ By completing this phase, the entire cloud foundation and Kubernetes platform ar
 | **🏗️ Automated Cloud Infrastructure** | AWS networking and the **BMS-Server EC2** instance are provisioned declaratively using **Terraform**. |
 | **⚙️ Bootstrapped CI/CD Server** | `resource.sh` automatically installs **Docker, Jenkins, Trivy, SonarQube**, and other required DevOps tools. |
 | **🔐 Secure IAM Configuration** | A dedicated **IAM User** with **least-privilege policies** manages AWS resources securely without using the Root Account. |
-| **☸️ Amazon EKS Control Plane** | The **kastro-eks** cluster is successfully created with **IAM OIDC Provider (IRSA)** enabled for secure pod-level authentication. |
+| **☸️ Amazon EKS Control Plane** | The **bookmyshow-eks** cluster is successfully created with **IAM OIDC Provider (IRSA)** enabled for secure pod-level authentication. |
 | **🖥️ Managed Worker Nodes** | A managed **Node Group** with **Auto Scaling** is deployed and securely connected to the Kubernetes Control Plane. |
 | **🚀 Deployment Ready** | The Kubernetes environment is fully configured and prepared for deploying application workloads and handling production traffic. |
 
@@ -479,11 +478,9 @@ docker run -d \
 
 A dedicated **User Token** is generated from **My Account → Security** and later stored securely in Jenkins Credentials.
 
-Example:
+Example: `squ_69eb05b41575c699579c6ced901eaafae66d63a2`
 
-```text
-squ_69eb05b41575c699579c6ced901eaafae66d63a2
-```
+
 
 This token authorizes Jenkins to upload code analysis reports securely.
 
@@ -542,7 +539,7 @@ Sensitive information is securely stored using **Manage Jenkins → Credentials*
 | Credential | Purpose | ID |
 |------------|----------|----|
 | Docker Hub Username & Password | Push Docker Images | `docker` |
-| SonarQube Token | Code Quality Analysis | *(Secret Text)* |
+| SonarQube Token | Code Quality Analysis | `Sonar-token` |
 | Gmail App Password | Email Notifications | `email-creds` |
 
 ---
@@ -701,7 +698,7 @@ stage('Install Dependencies') {
 - Ensures reproducible builds
 
 ---
-## 4. Build Docker Image
+## Stage 4. Build Docker Image
 
 Changes to the bookmyshow-app directory containing the Dockerfile and builds the container image locally on the Jenkins agent.
 ```groovy
@@ -721,7 +718,7 @@ stage ("Build Docker Image") {
 
 ---
 
-# 5. OWASP Dependency Scan
+## Stage 5. OWASP Dependency Scan
 
 Utilizes the OWASP Dependency-Check tool to scan the project dependencies for known, publicly disclosed vulnerabilities (CVEs).
 
@@ -740,6 +737,11 @@ stage('OWASP FS Scan') {
     }
 }
 ```
+### NVD API Integration
+
+The scan integrates with the **National Vulnerability Database (NVD) API** using the configured `nvdCredentialsId: 'nvd-api-key'` credential.
+
+This authenticated integration helps avoid public API rate limits, which can cause the vulnerability database update phase to stall. It also optimizes the pipeline by reducing the scan's database update time by approximately **70–80%**.
 
 **Outcome**
 
@@ -770,7 +772,7 @@ stage('Trivy FS Scan') {
 
 ---
 
-## 7. Tag & Push Docker Image
+## Stage 7. Tag & Push Docker Image
 
 Securely injects Docker credentials, logs into Docker Hub, and pushes the newly built image with both a dynamic build number tag and a latest backup tag.
 
@@ -806,7 +808,7 @@ stage ("Tag & Push to DockerHub") {
 
 ---
 
-# 8. Local Container Deployment
+## Stage 8. Local Container Deployment
 
 Stops any existing local container instance and spins up the latest Docker image locally to verify runtime stability before Kubernetes deployment.
 
@@ -839,7 +841,7 @@ stage('Deploy to Container') {
 ---
 
 
-## Stage 8: Deploy to Amazon EKS
+## Stage 9: Deploy to Amazon EKS
 
 Authenticates the Jenkins agent with AWS STS, dynamically updates the kubeconfig for the bookmyshow-eks cluster, applies the necessary Kubernetes manifests, and forces a zero-downtime rollout restart.
 
@@ -876,14 +878,13 @@ stage('Deploy to EKS Cluster') {
 
 ---
 
-## Stage 7: Email Notification
+## Stage 10: Email Notification
 
 Automatically sends build results along with the Trivy security report.
 
 ### Jenkinsfile
 
 ```groovy
-post {
 post {
     always {
         script {
@@ -981,7 +982,6 @@ sudo systemctl enable node_exporter
 sudo systemctl start node_exporter
 ```
 
----
 
 ## 3. Prometheus Target Configuration
 
@@ -1000,19 +1000,16 @@ Prometheus is configured to scrape metrics from **Node Exporter** and **Jenkins*
     - targets: ['<your-jenkins-ip>:<your-jenkins-port>']
 ```
 
-### Configuration Validation
+### • Configuration Validation
 
 ```bash
 promtool check config /etc/prometheus/prometheus.yml
 ```
 
-A successful validation returns:
+A successful validation returns:`SUCCESS`
 
-```text
-SUCCESS
-```
 
-### Reload Prometheus
+### • Reload Prometheus
 
 The configuration is reloaded without restarting the service:
 
@@ -1020,7 +1017,7 @@ The configuration is reloaded without restarting the service:
 curl -X POST http://localhost:9090/-/reload
 ```
 
-### Target Verification
+### • Target Verification
 
 Open:
 
@@ -1078,17 +1075,18 @@ Password: admin
 
 Prometheus is configured as the primary Grafana data source.
 
-```text
-Grafana
-   ↓
-Prometheus
-   ↓
-Metrics
-   ↓
-Node Exporter / Jenkins
+```mermaid
+flowchart TD
+    subgraph Targets ["Data Sources"]
+        NE[Node Exporter]
+        J[Jenkins]
+    end
+
+    NE & J -->|Expose Metrics| P[Prometheus]
+    P -->|Scrape & Store Data| G[Grafana]
 ```
 
----
+
 
 ## Grafana Dashboards
 
@@ -1099,16 +1097,16 @@ Node Exporter / Jenkins
 
 ---
 
-## Phase Outcome
+## Phase 4 Outcome
 
 The monitoring environment now provides:
 
-- **Prometheus** → Metric collection and time-series storage
-- **Node Exporter** → Infrastructure and OS metrics
-- **Grafana** → Interactive visualization and dashboards
-- **Jenkins Metrics** → CI/CD pipeline monitoring
-- **Systemd** → Automatic service startup and management
-- **Dedicated Monitoring Server** → Isolated observability environment
+- ✅ **Prometheus** → Metric collection and time-series storage
+- ✅ **Node Exporter** → Infrastructure and OS metrics
+- ✅ **Grafana** → Interactive visualization and dashboards
+- ✅ **Jenkins Metrics** → CI/CD pipeline monitoring
+- ✅ **Systemd** → Automatic service startup and management
+- ✅ **Dedicated Monitoring Server** → Isolated observability environment
 
 
 
