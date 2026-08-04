@@ -1,4 +1,4 @@
-# 🎬 BookMyShow Clone – DevSecOps CI/CD & Amazon EKS Deployment
+#  BookMyShow Clone – DevSecOps CI/CD & Amazon EKS Deployment
 
 A production-grade, highly available deployment of a **BookMyShow Clone** demonstrating a complete **DevSecOps** workflow. The project leverages **Jenkins** for CI/CD, **Docker** for containerization, **Terraform** for Infrastructure as Code (IaC), **Ansible** for configuration management, and **Amazon EKS (Elastic Kubernetes Service)** for container orchestration.
 
@@ -6,7 +6,7 @@ Application traffic is exposed through an **AWS Network Load Balancer (NLB)** an
 
 ---
 
-## 📑 Table of Contents
+##  Table of Contents
 
 1. Project Overview
 2. Architecture Overview
@@ -18,7 +18,7 @@ Application traffic is exposed through an **AWS Network Load Balancer (NLB)** an
 
 <br>
 
-# 🎯 Project Overview
+#  Project Overview
 
 This project demonstrates an end-to-end **DevSecOps pipeline** capable of automatically building, scanning, deploying, and scaling a containerized React application on **Amazon EKS**.
 
@@ -26,33 +26,33 @@ This project demonstrates an end-to-end **DevSecOps pipeline** capable of automa
 
 | Feature | Description |
 |---------|-------------|
-| ☁️ Infrastructure as Code | AWS infrastructure provisioned using Terraform |
-| ⚙️ Configuration Management | Automated server configuration with Ansible |
-| 🐳 Containerization | Dockerized React application |
-| ☸️ Kubernetes | High availability deployment on Amazon EKS |
-| 📈 Auto Scaling | Horizontal Pod Autoscaler (HPA) |
-| 🔄 CI/CD | Fully automated Jenkins pipeline |
-| 🔒 DevSecOps | Trivy file system vulnerability scanning |
-| 🌐 Networking | AWS Network Load Balancer + Route 53 |
+|  Infrastructure as Code | AWS infrastructure provisioned using Terraform |
+|  Configuration Management | Automated server configuration with Ansible |
+|  Containerization | Dockerized React application |
+|  Kubernetes | High availability deployment on Amazon EKS |
+|  Auto Scaling | Horizontal Pod Autoscaler (HPA) |
+|  CI/CD | Fully automated Jenkins pipeline |
+|  DevSecOps | Trivy file system vulnerability scanning |
+|  Networking | AWS Network Load Balancer + Route 53 |
 
 <br>
 
-# 🏗️ Architecture Overview
+#  Architecture Overview
 
 
 | Phase | Component / Technology | Action / Workflow Description |
 |---|---|---|
-| **☁️ 1. Infrastructure Provisioning** | **Terraform & AWS EC2** | Declaratively provisions the foundational AWS infrastructure (VPCs, Subnets, Security Groups) and bootstraps the primary server using `resource.sh` to automatically install Jenkins, Docker, and other CI/CD prerequisites. |
-| **🔄️ 2. Pipeline Initiation** | **Jenkins & GitHub** | The pipeline is triggered manually or via webhook. Jenkins cleans the workspace and checks out the latest source code from the GitHub repository. |
-| **🔍 3. Quality & Security (Shift-Left)** | **SonarQube** | Executes static code analysis to detect bugs and code smells, enforcing a Quality Gate to validate security thresholds before proceeding. |
-| **⚛️ 4. Application Build** | **Node.js (NPM) & React** | Resolves and installs the necessary frontend packages and dependencies required for the React application. |
-| **🛡️ 5. Vulnerability Scanning** | **OWASP & Trivy (Aqua)** | Performs an OWASP FS Scan to check for known open-source CVEs, followed by a Trivy FS Scan to audit the local file system for vulnerabilities and exposed secrets. |
-| **🐳 6. Containerization** | **Docker & Docker Hub** | Compiles the validated application into a Docker container image. The image is tagged and pushed to Docker Hub for secure storage. |
-| **🧪 7. Local Verification** | **Local Docker Runtime** | Deploys the freshly built image to a local container on the Jenkins agent to verify basic runtime stability before production deployment. |
-| **☸️ 8. Cluster Deployment** | **AWS EKS & Kubernetes** | Jenkins applies the Kubernetes manifests (`deployment.yml`, `service.yml`) to deploy the containerized application across EKS worker nodes spanning `ap-south-1a` and `ap-south-1b`. |
-| **🌐 9. Traffic Routing & Ingress** | **Amazon Route 53 & AWS NLB** | Client requests to `bookmyshow.threetierapp.click` are resolved by Route 53. Traffic is forwarded through a Kubernetes Service configured as an internet-facing Network Load Balancer: **TCP 80 → NodePort 32745 → Pod Port 3000**. |
-| **📊 10. Observability & Monitoring** | **Prometheus & Grafana** | A dedicated Monitoring Server in `ap-south-1c` continuously collects metrics from EKS worker nodes using Prometheus. Grafana visualizes the collected metrics through interactive dashboards accessible on **Port 3000**. |
-| **📩 11. Alerting & Notifications** | **Jenkins & Gmail** | A post-build action automatically sends rich HTML email notifications to administrators containing pipeline success/failure status and attached vulnerability reports. |
+| ** 1. Infrastructure Provisioning** | **Terraform & AWS EC2** | Declaratively provisions the foundational AWS infrastructure (VPCs, Subnets, Security Groups) and bootstraps the primary server using `resource.sh` to automatically install Jenkins, Docker, and other CI/CD prerequisites. |
+| **️ 2. Pipeline Initiation** | **Jenkins & GitHub** | The pipeline is triggered manually or via webhook. Jenkins cleans the workspace and checks out the latest source code from the GitHub repository. |
+| ** 3. Quality & Security (Shift-Left)** | **SonarQube** | Executes static code analysis to detect bugs and code smells, enforcing a Quality Gate to validate security thresholds before proceeding. |
+| ** 4. Application Build** | **Node.js (NPM) & React** | Resolves and installs the necessary frontend packages and dependencies required for the React application. |
+| ** 5. Vulnerability Scanning** | **OWASP & Trivy (Aqua)** | Performs an OWASP FS Scan to check for known open-source CVEs, followed by a Trivy FS Scan to audit the local file system for vulnerabilities and exposed secrets. |
+| ** 6. Containerization** | **Docker & Docker Hub** | Compiles the validated application into a Docker container image. The image is tagged and pushed to Docker Hub for secure storage. |
+| ** 7. Local Verification** | **Local Docker Runtime** | Deploys the freshly built image to a local container on the Jenkins agent to verify basic runtime stability before production deployment. |
+| ** 8. Cluster Deployment** | **AWS EKS & Kubernetes** | Jenkins applies the Kubernetes manifests (`deployment.yml`, `service.yml`) to deploy the containerized application across EKS worker nodes spanning `ap-south-1a` and `ap-south-1b`. |
+| ** 9. Traffic Routing & Ingress** | **Amazon Route 53 & AWS NLB** | Client requests to `bookmyshow.threetierapp.click` are resolved by Route 53. Traffic is forwarded through a Kubernetes Service configured as an internet-facing Network Load Balancer: **TCP 80 → NodePort 32745 → Pod Port 3000**. |
+| ** 10. Observability & Monitoring** | **Prometheus & Grafana** | A dedicated Monitoring Server in `ap-south-1c` continuously collects metrics from EKS worker nodes using Prometheus. Grafana visualizes the collected metrics through interactive dashboards accessible on **Port 3000**. |
+| ** 11. Alerting & Notifications** | **Jenkins & Gmail** | A post-build action automatically sends rich HTML email notifications to administrators containing pipeline success/failure status and attached vulnerability reports. |
 
 
 ##  Services & Tool Stack
@@ -68,7 +68,7 @@ This project demonstrates an end-to-end **DevSecOps pipeline** capable of automa
 * ** Prometheus & Node Exporter:** Used to collect and scrape hardware, OS, and Jenkins performance metrics.
 * **Grafana:** Visualization and monitoring dashboard used to display metrics collected by Prometheus.
 ---
-# 📂 Repository Structure
+#  Repository Structure
 
 ```text
 bookmyshow-clone/
@@ -95,17 +95,17 @@ bookmyshow-clone/
 ---
 <br>
 
-# ⚡ Phase 1: Infrastructure Provisioning & IAM Setup
+#  Phase 1: Infrastructure Provisioning & IAM Setup
 
 This phase establishes the foundational AWS infrastructure using **Terraform (Infrastructure as Code)** while implementing **IAM best practices** for secure cluster management.
 
 
 
-## 🏗️ 1. Infrastructure as Code (Terraform)
+##  1. Infrastructure as Code (Terraform)
 
 The infrastructure is managed declaratively using **Terraform**, with all IaC files organized inside the `Tf-script/` directory.
 
-### 📄 provider.tf
+###  provider.tf
 
 Initializes the AWS provider and defines the deployment region.
 
@@ -123,7 +123,7 @@ provider "aws" {
 
 ---
 
-### 📄 Main.tf
+###  Main.tf
 
 This file acts as the **core infrastructure blueprint** responsible for provisioning the AWS environment.
 
@@ -160,7 +160,7 @@ dynamic "ingress" {
 
 ---
 
-### 📄 resource.sh
+###  resource.sh
 
 The **bootstrap script** executed automatically when the EC2 instance is created.
 
@@ -192,7 +192,7 @@ resource "aws_instance" "bms_server" {
 
 <br>
 
-# 🔐 2. Identity & Access Management (IAM)
+#  2. Identity & Access Management (IAM)
 
 Instead of using the **AWS Root Account**, a dedicated **IAM User** is created for provisioning and managing the EKS cluster.
 
@@ -213,7 +213,7 @@ This follows the **Principle of Least Privilege (PoLP)** by granting only the pe
 ---
 <br>
 
-# ☸️ 3. Amazon EKS Cluster Creation & Management
+#  3. Amazon EKS Cluster Creation & Management
 
 ### What is Amazon EKS?
 
@@ -222,7 +222,7 @@ This follows the **Principle of Least Privilege (PoLP)** by granting only the pe
 AWS manages the **Kubernetes Control Plane** (API Server, Scheduler, etcd, and Controller Manager) across multiple Availability Zones, while users provision **Worker Nodes** to run application workloads.
 
 
-## 🔧 3.1 Required CLI Tools
+##  3.1 Required CLI Tools
 
 Before creating the EKS cluster, the **BMS-Server** must have the required Kubernetes management tools installed.
 
@@ -234,7 +234,7 @@ sudo apt update
 
 ---
 
-### 📦 Install kubectl
+###  Install kubectl
 
 `kubectl` is the official Kubernetes command-line tool used to communicate with the Kubernetes API Server.
 
@@ -261,7 +261,7 @@ kubectl version --short --client
 
 ---
 
-### 📦 Install eksctl
+###  Install eksctl
 
 `eksctl` is the official CLI utility used to create and manage Amazon EKS clusters.
 
@@ -287,7 +287,7 @@ eksctl version
 
 <br>
 
-# 🚀 3.2 EKS Cluster Provisioning Workflow
+#  3.2 EKS Cluster Provisioning Workflow
 
 The cluster is provisioned in multiple stages to maintain better control over networking, security, and compute resources.
 
@@ -337,8 +337,11 @@ After saving `cluster.yaml`, provision the EKS cluster using:
 eksctl create cluster -f cluster.yaml
 ```
 > **Note:** Control Plane provisioning typically takes **5–10 minutes**.
-
-
+<img width="900" height="520" alt="Screenshot 2026-07-23 014032" src="https://github.com/user-attachments/assets/b0a798e0-0d5d-4bfa-8db7-015a3bc88df8" />
+<p align="center"><font color="gray"><i>EKS Control Plane Creation Success</i></font></p>
+<br>
+<img width="900" height="520" alt="Screenshot 2026-07-23 014057" src="https://github.com/user-attachments/assets/505393d6-4d6b-4aca-9be1-30ae0f18c983" />
+<p align="center"><font color="gray"><i>Amazon EKS Cluster Active Status</i></font></p>
 <br>
 
 ## Step 2 — Associate IAM OIDC Provider (IRSA)
@@ -351,6 +354,8 @@ eksctl utils associate-iam-oidc-provider \
   --cluster bookmyshow-eks \
   --approve
 ```
+<img width="1077" height="221" alt="Screenshot 2026-07-23 014436" src="https://github.com/user-attachments/assets/28e63a2f-7c92-45c3-a8f3-b5eef708fda1" />
+<p align="center"><font color="gray"><i>IAM OIDC Provider Association Success</i></font></p>
 
 ### Why IRSA?
 
@@ -384,6 +389,8 @@ eksctl create nodegroup \
   --appmesh-access \
   --alb-ingress-access
 ```
+<img width="900" height="520" alt="Screenshot 2026-07-24 120208" src="https://github.com/user-attachments/assets/b7950809-130c-4d16-8076-94934af53418" />
+<p align="center"><font color="gray"><i>EKS Managed Worker Nodes Created</i></font></p>
 
 ### Node Group Configuration
 
@@ -399,6 +406,14 @@ eksctl create nodegroup \
 | Key Pair | `bms` |
 | Node Type | AWS Managed Node Group |
 
+<img width="900" height="520" alt="Screenshot 2026-07-24 120223" src="https://github.com/user-attachments/assets/a9f792bd-29ce-4bd0-9262-537a63ec083a" />
+<p align="center"><font color="gray"><i>EC2 Dashboard Showing Worker Nodes</i></font></p>
+
+<br>
+
+<img width="1902" height="1078" alt="Screenshot 2026-07-26 041322" src="https://github.com/user-attachments/assets/4231ecc6-219c-4db5-88fa-2c603c74f9bd" />
+<p align="center"><font color="gray"><i>EKS Console Compute Nodes View</i></font></p>
+
 ### Additional IAM Permissions
 
 The managed node group automatically receives permissions for:
@@ -412,29 +427,29 @@ The managed node group automatically receives permissions for:
 > **Note:** Worker Node provisioning typically completes within **5–10 minutes**.
 
 
-## ✅ Outcome of Phase 1: Infrastructure & Cluster Provisioning
+##  Outcome of Phase 1: Infrastructure & Cluster Provisioning
 
 By completing this phase, the entire cloud foundation and Kubernetes platform are provisioned, secured, and ready for application deployment.
 
 | Component | Outcome |
 |-----------|---------|
-| **🏗️ Automated Cloud Infrastructure** | AWS networking and the **BMS-Server EC2** instance are provisioned declaratively using **Terraform**. |
-| **⚙️ Bootstrapped CI/CD Server** | `resource.sh` automatically installs **Docker, Jenkins, Trivy, SonarQube**, and other required DevOps tools. |
-| **🔐 Secure IAM Configuration** | A dedicated **IAM User** with **least-privilege policies** manages AWS resources securely without using the Root Account. |
-| **☸️ Amazon EKS Control Plane** | The **bookmyshow-eks** cluster is successfully created with **IAM OIDC Provider (IRSA)** enabled for secure pod-level authentication. |
-| **🖥️ Managed Worker Nodes** | A managed **Node Group** with **Auto Scaling** is deployed and securely connected to the Kubernetes Control Plane. |
-| **🚀 Deployment Ready** | The Kubernetes environment is fully configured and prepared for deploying application workloads and handling production traffic. |
+| ** Automated Cloud Infrastructure** | AWS networking and the **BMS-Server EC2** instance are provisioned declaratively using **Terraform**. |
+| ** Bootstrapped CI/CD Server** | `resource.sh` automatically installs **Docker, Jenkins, Trivy, SonarQube**, and other required DevOps tools. |
+| ** Secure IAM Configuration** | A dedicated **IAM User** with **least-privilege policies** manages AWS resources securely without using the Root Account. |
+| ** Amazon EKS Control Plane** | The **bookmyshow-eks** cluster is successfully created with **IAM OIDC Provider (IRSA)** enabled for secure pod-level authentication. |
+| ** Managed Worker Nodes** | A managed **Node Group** with **Auto Scaling** is deployed and securely connected to the Kubernetes Control Plane. |
+| ** Deployment Ready** | The Kubernetes environment is fully configured and prepared for deploying application workloads and handling production traffic. |
 
 <br>
 
 
-# ⚙️ Phase 2: CI/CD Environment Setup
+#  Phase 2: CI/CD Environment Setup
 
 This phase focuses on configuring the **CI/CD server (Jenkins)** and the **code quality platform (SonarQube)** to automate application building, testing, security scanning, and deployment.
 
 ---
 
-# 🔍 1. SonarQube Configuration
+#  1. SonarQube Configuration
 
 **SonarQube** performs **Static Application Security Testing (SAST)** and continuously analyzes the source code to identify:
 
@@ -494,7 +509,7 @@ This enables the Jenkins pipeline to use the `waitForQualityGate()` step, allowi
 
 ---
 
-# 🚀 2. Jenkins Configuration
+#  2. Jenkins Configuration
 
 Jenkins serves as the central automation engine responsible for building, scanning, containerizing, and deploying the application.
 
@@ -558,15 +573,15 @@ Jenkins is configured to send automated pipeline notifications using **Gmail SMT
 
 ### Build Notification Triggers
 
-- ✅ Build Success
-- ❌ Build Failure
-- 🔄 Always
+-  Build Success
+-  Build Failure
+-  Always
 
 This provides developers with immediate feedback after every pipeline execution.
 
 ---
 
-## ✅ Outcome of Phase 2
+##  Outcome of Phase 2
 
 After completing this phase, the CI/CD environment is fully configured with:
 
@@ -669,6 +684,9 @@ stage('Quality Gate') {
 - Validates code quality
 - Prevents poor-quality code from progressing
 
+<img width="900" height="520" alt="Screenshot 2026-07-26 114646" src="https://github.com/user-attachments/assets/c2c0fca5-1364-4e9d-971c-49eaaa688bd1" />
+<p align="center"><font color="gray"><i>SonarQube Static Code Analysis Dashboard Passed</i></font></p>
+
 ---
 
 ## Stage 3: Dependency Installation
@@ -770,6 +788,9 @@ stage('Trivy FS Scan') {
 - Generates `trivyfs.txt`
 - Report attached to notification email
 
+<img width="900" height="520" alt="Screenshot 2026-07-26 114845" src="https://github.com/user-attachments/assets/ea068bd5-4342-4fed-9a01-2f37c12bbe3d" />
+<p align="center"><font color="gray"><i>Trivy File System Vulnerability Scan Report</i></font></p>
+
 ---
 
 ## Stage 7. Tag & Push Docker Image
@@ -837,6 +858,9 @@ stage('Deploy to Container') {
 - Local runtime validation completed
 - A live, running container verifying that the Docker image executes correctly without immediate crashing
 - Confirms image functionality
+  
+<img width="900" height="520" alt="Screenshot 2026-07-26 115033" src="https://github.com/user-attachments/assets/093e0691-07a7-4366-a5d2-8295a9a07360" />
+<p align="center"><font color="gray"><i>Local Docker Container Running Successfully</i></font></p>
 
 ---
 
@@ -868,6 +892,13 @@ stage('Deploy to EKS Cluster') {
     }
 }
 ```
+<img width="900" height="520" alt="Screenshot 2026-07-26 041428" src="https://github.com/user-attachments/assets/bac6502c-5e28-4f1c-96ca-bce84f0c65a9" />
+<p align="center"><font color="gray"><i>Active AWS Network Load Balancer</i></font></p>
+
+<br>
+
+<img width="900" height="520" alt="Screenshot 2026-07-26 041358" src="https://github.com/user-attachments/assets/eebdf4b7-97fc-49bf-9267-ca26985509ca" />
+<p align="center"><font color="gray"><i>Route 53 Domain DNS Configuration</i></font></p>
 
 **Outcome**
 
@@ -876,6 +907,8 @@ stage('Deploy to EKS Cluster') {
 - Verifies Pods and Services
 - Application becomes accessible via configured Kubernetes service.
 
+<img width="900" height="520" alt="Screenshot 2026-07-26 115103" src="https://github.com/user-attachments/assets/2981b5a9-5a20-446e-83e2-e49511f56818" />
+<p align="center"><font color="gray"><i>Kubernetes EKS Cluster Resources Deployed Successfully</i></font></p>
 ---
 
 ## Stage 10: Email Notification
@@ -908,20 +941,24 @@ post {
 - Includes Trivy security report
 - Provides direct build URL
 
-
+<img width="900" height="520" alt="Screenshot 2026-07-26 114837" src="https://github.com/user-attachments/assets/27f264ab-01c8-48ac-b9ed-f87550a2714f" />
+<p align="center"><font color="gray"><i>Automated Jenkins Post Build Email Notification</i></font></p>
 
 ## Phase 3 Outcome
 
 After completing this phase:
 
-- ✅ Source code automatically fetched from GitHub
-- ✅ Static code analysis completed with SonarQube
-- ✅ Quality Gate validation enforced
-- ✅ Dependencies installed successfully
-- ✅ Security vulnerabilities scanned using Trivy
-- ✅ Docker image built and pushed to Docker Hub
-- ✅ Application deployed to Amazon EKS
-- ✅ Automated email notifications delivered with logs and security reports
+-  Source code automatically fetched from GitHub
+-  Static code analysis completed with SonarQube
+-  Quality Gate validation enforced
+-  Dependencies installed successfully
+-  Security vulnerabilities scanned using Trivy
+-  Docker image built and pushed to Docker Hub
+-  Application deployed to Amazon EKS
+-  Automated email notifications delivered with logs and security reports
+
+<img width="900" height="520" alt="Screenshot 2026-07-26 115011" src="https://github.com/user-attachments/assets/c558abb5-6e37-4455-bee3-014c2106701c" />
+<p align="center"><font color="gray"><i>Successful Jenkins CI/CD Pipeline Execution</i></font></p>
 
 <br>
 
@@ -1010,7 +1047,6 @@ A successful validation returns:`SUCCESS`
 
 
 ### • Reload Prometheus
-
 The configuration is reloaded without restarting the service:
 
 ```bash
@@ -1032,6 +1068,9 @@ Expected target status:
 | Node Exporter | `9100` | `UP` |
 | Jenkins | Configured Port | `UP` |
 | Prometheus | `9090` | `UP` |
+
+<img width="900" height="520" alt="Screenshot 2026-07-26 114618" src="https://github.com/user-attachments/assets/7aeaa058-e81b-4916-aced-f0b10fb73116" />
+<p align="center"><font color="gray"><i>Prometheus Targets Active Status Dashboard</i></font></p>
 
 ---
 
@@ -1095,22 +1134,28 @@ flowchart TD
 | **1860** | Node Exporter Full | CPU, RAM, Swap, Disk & Network monitoring |
 | **9964** | Jenkins Performance & Health | Pipeline health, JVM uptime, executors & build status |
 
+<img width="900" height="520" alt="Screenshot 2026-07-26 114902" src="https://github.com/user-attachments/assets/83801410-8a70-4a30-9c15-48b3bd6cf507" />
+<p align="center"><font color="gray"><i>Grafana Node Exporter Infrastructure Metrics Dashboard</i></font></p>
+
+<br>
+<img width="900" height="520" alt="Screenshot 2026-07-26 114854" src="https://github.com/user-attachments/assets/3d613637-84f8-4e6c-9c7c-c00a7e203d72" />
+<p align="center"><font color="gray"><i>Grafana Jenkins Performance and Health Dashboard</i></font></p>
 ---
 
 ## Phase 4 Outcome
 
 The monitoring environment now provides:
 
-- ✅ **Prometheus** → Metric collection and time-series storage
-- ✅ **Node Exporter** → Infrastructure and OS metrics
-- ✅ **Grafana** → Interactive visualization and dashboards
-- ✅ **Jenkins Metrics** → CI/CD pipeline monitoring
-- ✅ **Systemd** → Automatic service startup and management
-- ✅ **Dedicated Monitoring Server** → Isolated observability environment
+-  **Prometheus** → Metric collection and time-series storage
+-  **Node Exporter** → Infrastructure and OS metrics
+-  **Grafana** → Interactive visualization and dashboards
+-  **Jenkins Metrics** → CI/CD pipeline monitoring
+-  **Systemd** → Automatic service startup and management
+-  **Dedicated Monitoring Server** → Isolated observability environment
 
 
 
-# 🚀 Future Scope
+#  Future Scope
 
 - Provision the EKS cluster using Terraform modules.
 - Integrate SonarQube for static code analysis.
