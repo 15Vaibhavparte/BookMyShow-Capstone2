@@ -4,6 +4,8 @@ A production-grade, highly available deployment of a **BookMyShow Clone** demons
 
 Application traffic is exposed through an **AWS Network Load Balancer (NLB)** and mapped to a custom domain using **Amazon Route 53**.
 
+
+📊
 ---
 ##  DevSecOps CI/CD Pipeline Demonstration
 
@@ -13,13 +15,14 @@ https://github.com/user-attachments/assets/2e3736c6-8e25-41b1-94e0-b3c1aacc46b7
 
 ##  Table of Contents
 
-1. Project Overview
-2. Architecture Overview
-3. Repository Structure
-4. Infrastructure Provisioning (Terraform)
-5. Kubernetes Configuration
-6. CI/CD Pipeline
-7. Troubleshooting
+1. [Project Overview](#project-overview)
+2. [Architecture Overview](#architecture-overview)
+3. [Repository Structure](#repository-structure)
+4. [Phase 1: Infrastructure Provisioning & IAM Setup](#phase-1-infrastructure-provisioning--iam-setup)
+5. [Phase 2: CI/CD Environment Setup](#phase-2-cicd-environment-setup)
+6. [Phase 3: CI/CD Pipeline Execution](#phase-3-cicd-pipeline-execution)
+7. [Phase 4: Monitoring & Observability](#phase-4-monitoring--observability)
+8. [Future Scope](#future-scope)
 
 <br>
 
