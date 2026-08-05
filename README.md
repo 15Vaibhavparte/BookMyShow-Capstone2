@@ -42,17 +42,17 @@ This project demonstrates an end-to-end **DevSecOps pipeline** capable of automa
 
 | Phase | Component / Technology | Action / Workflow Description |
 |---|---|---|
-| ** 1. Infrastructure Provisioning** | **Terraform & AWS EC2** | Declaratively provisions the foundational AWS infrastructure (VPCs, Subnets, Security Groups) and bootstraps the primary server using `resource.sh` to automatically install Jenkins, Docker, and other CI/CD prerequisites. |
-| **️ 2. Pipeline Initiation** | **Jenkins & GitHub** | The pipeline is triggered manually or via webhook. Jenkins cleans the workspace and checks out the latest source code from the GitHub repository. |
-| ** 3. Quality & Security (Shift-Left)** | **SonarQube** | Executes static code analysis to detect bugs and code smells, enforcing a Quality Gate to validate security thresholds before proceeding. |
-| ** 4. Application Build** | **Node.js (NPM) & React** | Resolves and installs the necessary frontend packages and dependencies required for the React application. |
-| ** 5. Vulnerability Scanning** | **OWASP & Trivy (Aqua)** | Performs an OWASP FS Scan to check for known open-source CVEs, followed by a Trivy FS Scan to audit the local file system for vulnerabilities and exposed secrets. |
-| ** 6. Containerization** | **Docker & Docker Hub** | Compiles the validated application into a Docker container image. The image is tagged and pushed to Docker Hub for secure storage. |
-| ** 7. Local Verification** | **Local Docker Runtime** | Deploys the freshly built image to a local container on the Jenkins agent to verify basic runtime stability before production deployment. |
-| ** 8. Cluster Deployment** | **AWS EKS & Kubernetes** | Jenkins applies the Kubernetes manifests (`deployment.yml`, `service.yml`) to deploy the containerized application across EKS worker nodes spanning `ap-south-1a` and `ap-south-1b`. |
-| ** 9. Traffic Routing & Ingress** | **Amazon Route 53 & AWS NLB** | Client requests to `bookmyshow.threetierapp.click` are resolved by Route 53. Traffic is forwarded through a Kubernetes Service configured as an internet-facing Network Load Balancer: **TCP 80 → NodePort 32745 → Pod Port 3000**. |
-| ** 10. Observability & Monitoring** | **Prometheus & Grafana** | A dedicated Monitoring Server in `ap-south-1c` continuously collects metrics from EKS worker nodes using Prometheus. Grafana visualizes the collected metrics through interactive dashboards accessible on **Port 3000**. |
-| ** 11. Alerting & Notifications** | **Jenkins & Gmail** | A post-build action automatically sends rich HTML email notifications to administrators containing pipeline success/failure status and attached vulnerability reports. |
+| **1. Infrastructure Provisioning** | **Terraform & AWS EC2** | Declaratively provisions the foundational AWS infrastructure (VPCs, Subnets, Security Groups) and bootstraps the primary server using `resource.sh` to automatically install Jenkins, Docker, and other CI/CD prerequisites. |
+| **️2. Pipeline Initiation** | **Jenkins & GitHub** | The pipeline is triggered manually or via webhook. Jenkins cleans the workspace and checks out the latest source code from the GitHub repository. |
+| **3. Quality & Security (Shift-Left)** | **SonarQube** | Executes static code analysis to detect bugs and code smells, enforcing a Quality Gate to validate security thresholds before proceeding. |
+| **4. Application Build** | **Node.js (NPM) & React** | Resolves and installs the necessary frontend packages and dependencies required for the React application. |
+| **5. Vulnerability Scanning** | **OWASP & Trivy (Aqua)** | Performs an OWASP FS Scan to check for known open-source CVEs, followed by a Trivy FS Scan to audit the local file system for vulnerabilities and exposed secrets. |
+| **6. Containerization** | **Docker & Docker Hub** | Compiles the validated application into a Docker container image. The image is tagged and pushed to Docker Hub for secure storage. |
+| **7. Local Verification** | **Local Docker Runtime** | Deploys the freshly built image to a local container on the Jenkins agent to verify basic runtime stability before production deployment. |
+| **8. Cluster Deployment** | **AWS EKS & Kubernetes** | Jenkins applies the Kubernetes manifests (`deployment.yml`, `service.yml`) to deploy the containerized application across EKS worker nodes spanning `ap-south-1a` and `ap-south-1b`. |
+| **9. Traffic Routing & Ingress** | **Amazon Route 53 & AWS NLB** | Client requests to `bookmyshow.threetierapp.click` are resolved by Route 53. Traffic is forwarded through a Kubernetes Service configured as an internet-facing Network Load Balancer: **TCP 80 → NodePort 32745 → Pod Port 3000**. |
+| **10. Observability & Monitoring** | **Prometheus & Grafana** | A dedicated Monitoring Server in `ap-south-1c` continuously collects metrics from EKS worker nodes using Prometheus. Grafana visualizes the collected metrics through interactive dashboards accessible on **Port 3000**. |
+| **11. Alerting & Notifications** | **Jenkins & Gmail** | A post-build action automatically sends rich HTML email notifications to administrators containing pipeline success/failure status and attached vulnerability reports. |
 
 
 ##  Services & Tool Stack
