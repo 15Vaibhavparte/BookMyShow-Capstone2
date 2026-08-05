@@ -1,11 +1,11 @@
-#  BookMyShow Clone – DevSecOps CI/CD & Amazon EKS Deployment
+# 🎬 BookMyShow Clone – DevSecOps CI/CD & Amazon EKS Deployment
 
 A production-grade, highly available deployment of a **BookMyShow Clone** demonstrating a complete **DevSecOps** workflow. The project leverages **Jenkins** for CI/CD, **Docker** for containerization, **Terraform** for Infrastructure as Code (IaC), **Ansible** for configuration management, and **Amazon EKS (Elastic Kubernetes Service)** for container orchestration.
 
 Application traffic is exposed through an **AWS Network Load Balancer (NLB)** and mapped to a custom domain using **Amazon Route 53**.
 
 
-📊
+
 ---
 ##  DevSecOps CI/CD Pipeline Demonstration
 
@@ -77,8 +77,10 @@ This project demonstrates an end-to-end **DevSecOps pipeline** capable of automa
 * **Kubernetes (EKS):** Container orchestration platform managing application deployment, scaling, and networking.
 * ** Prometheus & Node Exporter:** Used to collect and scrape hardware, OS, and Jenkins performance metrics.
 * **Grafana:** Visualization and monitoring dashboard used to display metrics collected by Prometheus.
----
-#  Repository Structure
+
+<br>
+
+# 📂 Repository Structure
 
 ```text
 bookmyshow-clone/
@@ -105,17 +107,17 @@ bookmyshow-clone/
 ---
 <br>
 
-#  Phase 1: Infrastructure Provisioning & IAM Setup
+# ⚡ Phase 1: Infrastructure Provisioning & IAM Setup
 
 This phase establishes the foundational AWS infrastructure using **Terraform (Infrastructure as Code)** while implementing **IAM best practices** for secure cluster management.
 
 
 
-##  1. Infrastructure as Code (Terraform)
+# 🏗️ 1. Infrastructure as Code (Terraform)
 
 The infrastructure is managed declaratively using **Terraform**, with all IaC files organized inside the `Tf-script/` directory.
 
-###  provider.tf
+### 📄 provider.tf
 
 Initializes the AWS provider and defines the deployment region.
 
@@ -133,7 +135,7 @@ provider "aws" {
 
 ---
 
-###  Main.tf
+### 📄 Main.tf
 
 This file acts as the **core infrastructure blueprint** responsible for provisioning the AWS environment.
 
@@ -170,7 +172,7 @@ dynamic "ingress" {
 
 ---
 
-###  resource.sh
+### 📄 resource.sh
 
 The **bootstrap script** executed automatically when the EC2 instance is created.
 
@@ -202,7 +204,7 @@ resource "aws_instance" "bms_server" {
 
 <br>
 
-#  2. Identity & Access Management (IAM)
+# 🔐 2. Identity & Access Management (IAM)
 
 Instead of using the **AWS Root Account**, a dedicated **IAM User** is created for provisioning and managing the EKS cluster.
 
@@ -223,7 +225,7 @@ This follows the **Principle of Least Privilege (PoLP)** by granting only the pe
 ---
 <br>
 
-#  3. Amazon EKS Cluster Creation & Management
+# ☸️ 3. Amazon EKS Cluster Creation & Management
 
 ### What is Amazon EKS?
 
@@ -297,12 +299,10 @@ eksctl version
 
 <br>
 
-#  3.2 EKS Cluster Provisioning Workflow
+##  3.2 EKS Cluster Provisioning Workflow
 
 The cluster is provisioned in multiple stages to maintain better control over networking, security, and compute resources.
 
-
-## 3.2. EKS Cluster Provisioning Workflow
 
 ### Step A: Create the EKS Control Plane Configuration File
 
