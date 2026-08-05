@@ -5,6 +5,11 @@ A production-grade, highly available deployment of a **BookMyShow Clone** demons
 Application traffic is exposed through an **AWS Network Load Balancer (NLB)** and mapped to a custom domain using **Amazon Route 53**.
 
 ---
+##  DevSecOps CI/CD Pipeline Demonstration
+
+The provided demonstration video showcases the complete, fully automated DevSecOps lifecycle of the BookMyShow clone, from a developer's code commit to a live production deployment on Amazon EKS. 
+
+https://github.com/user-attachments/assets/2e3736c6-8e25-41b1-94e0-b3c1aacc46b7
 
 ##  Table of Contents
 
@@ -54,6 +59,8 @@ This project demonstrates an end-to-end **DevSecOps pipeline** capable of automa
 | **10. Observability & Monitoring** | **Prometheus & Grafana** | A dedicated Monitoring Server in `ap-south-1c` continuously collects metrics from EKS worker nodes using Prometheus. Grafana visualizes the collected metrics through interactive dashboards accessible on **Port 3000**. |
 | **11. Alerting & Notifications** | **Jenkins & Gmail** | A post-build action automatically sends rich HTML email notifications to administrators containing pipeline success/failure status and attached vulnerability reports. |
 
+<img width="900" height="520" alt="Untitled Diagram" src="https://github.com/user-attachments/assets/725ea1a5-cd1f-4088-b36a-1a50f30c02a0" />
+<p align="center"><font color="gray"><i>AWS EKS Cloud Deployment Architecture</i></font></p>
 
 ##  Services & Tool Stack
 
@@ -595,6 +602,11 @@ After completing this phase, the CI/CD environment is fully configured with:
 # Phase 3: CI/CD Pipeline Execution
 
 In this phase, a **Jenkins Pipeline** automates the complete build, security scan, containerization, and deployment process for the application. Before execution, the Jenkins server is authenticated with AWS using `aws configure`, enabling secure access to the EKS cluster.
+
+<p align="center">
+<img width="500" height="800" alt="ChatGPT Image Aug 2, 2026, 10_28_47 PM" src="https://github.com/user-attachments/assets/e8582876-3d51-4a83-90f5-6488361f13e8" />
+</p>
+<p align="center"><font color="gray"><i>Jenkins CI/CD Pipeline Execution Flow</i></font></p>
 
 ---
 
